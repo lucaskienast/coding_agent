@@ -1,19 +1,14 @@
 import os
 
 
-def get_files_info(working_directory: str, directory: str = None) -> str:
+def get_files_info(working_directory: str, directory: str = ".") -> str:
     absolute_working_dir = os.path.abspath(working_directory)
-    print("absolute_working_dir", absolute_working_dir)
-
-    if directory is None:
-        abs_dir = os.path.abspath(working_directory)
-    else:
-        abs_dir = os.path.abspath(os.path.join(working_directory, directory))
-
-    print("abs_dir", abs_dir)
+    #print("absolute_working_dir", absolute_working_dir)
+    abs_dir = os.path.abspath(os.path.join(working_directory, directory))
+    #print("abs_dir", abs_dir)
 
     if not abs_dir.startswith(absolute_working_dir):
-        return f"Error: {abs_dir} is not a valid directory"
+        return f"Error: {abs_dir} is not in the working directory"
 
     dir_contents = os.listdir(abs_dir)
 

@@ -49,5 +49,5 @@ def main():
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
 
 if __name__ == "__main__":
-    #main()
-    print(get_files_info("calculator", "pkg"))
+    main()
+    #print(get_files_info("calculator", "pkg"))

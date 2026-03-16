@@ -8,6 +8,7 @@ except ImportError:
     from pkg import render as render_service
 
 
+# TODO: fix below more elegantly
 # Re-export these so existing tests still pass.
 parse_expression = calculator_service.parse_expression
 calculate = calculator_service.calculate

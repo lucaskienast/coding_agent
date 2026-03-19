@@ -1,4 +1,5 @@
 import os
+from google.genai import types as genai_types
 
 
 def write_file(working_directory: str, file_path: str, content: str) -> str:
@@ -21,3 +22,23 @@ def write_file(working_directory: str, file_path: str, content: str) -> str:
         return f"Successfully wrote to file {file_path} {len(content)} characters"
     except Exception as e:
         return f"Could not write to file {file_path} {len(content)} characters: {e}"
+
+
+schema_write_file = genai_types.FunctionDeclaration(
+    name="write_file",
+    description="Writes content to a file within the working directory, creating parent directories as needed.",
+    parameters=genai_types.Schema(
+        type=genai_types.Type.OBJECT,
+        properties={
+            "file_path": genai_types.Schema(
+                type=genai_types.Type.STRING,
+                description="Path to the file to write, relative to the working directory.",
+            ),
+            "content": genai_types.Schema(
+                type=genai_types.Type.STRING,
+                description="The content to write to the file.",
+            ),
+        },
+        required=["file_path", "content"],
+    ),
+)

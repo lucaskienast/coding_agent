@@ -1,6 +1,7 @@
 import os
 import subprocess
 from typing import Iterable
+from google.genai import types as genai_types
 
 
 def run_python_file(working_directory: str, file_path: str, args: Iterable[str] | None = None) -> str:
@@ -38,3 +39,24 @@ def run_python_file(working_directory: str, file_path: str, args: Iterable[str] 
         return output
     except Exception as e:
         return f"Error executing Python file {abs_file_path}: {e}"
+
+
+schema_run_python_file = genai_types.FunctionDeclaration(
+    name="run_python_file",
+    description="Executes a Python file within the working directory and returns its stdout/stderr output.",
+    parameters=genai_types.Schema(
+        type=genai_types.Type.OBJECT,
+        properties={
+            "file_path": genai_types.Schema(
+                type=genai_types.Type.STRING,
+                description="Path to the .py file to execute, relative to the working directory.",
+            ),
+            "args": genai_types.Schema(
+                type=genai_types.Type.ARRAY,
+                items=genai_types.Schema(type=genai_types.Type.STRING),
+                description="Optional list of command-line arguments to pass to the script.",
+            ),
+        },
+        required=["file_path"],
+    ),
+)

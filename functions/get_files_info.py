@@ -1,4 +1,5 @@
 import os
+from google.genai import types as genai_types
 
 
 def get_files_info(working_directory: str, directory: str = ".") -> str:
@@ -19,3 +20,19 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
         final_response += f"- {dir_content}: is_dir={is_dir}, file_size={size} bytes\n"
 
     return final_response
+
+
+schema_get_files_info = genai_types.FunctionDeclaration(
+    name="get_files_info",
+    description="Lists the contents of a directory within the working directory, returning each entry's name, type (file or directory), and size in bytes.",
+    parameters=genai_types.Schema(
+        type=genai_types.Type.OBJECT,
+        properties={
+            "directory": genai_types.Schema(
+                type=genai_types.Type.STRING,
+                description="The directory to list, relative to the working directory. Defaults to '.' (the working directory itself).",
+            ),
+        },
+        required=[],
+    ),
+)

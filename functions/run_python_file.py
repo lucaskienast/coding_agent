@@ -17,7 +17,8 @@ def run_python_file(working_directory: str, file_path: str, args: Iterable[str] 
 
     try:
         final_args = ["python3", abs_file_path]
-        final_args.extend(args)
+        if args:
+            final_args.extend(args)
         result = subprocess.run(
             final_args,
             cwd=absolute_working_dir,
@@ -25,13 +26,12 @@ def run_python_file(working_directory: str, file_path: str, args: Iterable[str] 
             timeout=30,
         )
 
-        if result.stdout == "" and result.stderr == "":
+        if not result.stdout and not result.stderr:
             return "No output produced."
 
-        output = f"""
-        STDOUT: {result.stdout}
-        STDERR: {result.stderr}
-        """
+        stdout = result.stdout.decode(errors="replace")
+        stderr = result.stderr.decode(errors="replace")
+        output = f"STDOUT: {stdout}\nSTDERR: {stderr}\n"
 
         if result.returncode != 0:
             output += f"Process exited with return code {result.returncode}"

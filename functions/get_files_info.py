@@ -9,6 +9,9 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
     if not abs_dir.startswith(absolute_working_dir):
         return f"Error: {abs_dir} is not in the working directory"
 
+    if not os.path.exists(abs_dir):
+        return f"Error: {directory} does not exist"
+
     dir_contents = os.listdir(abs_dir)
 
     final_response = ""

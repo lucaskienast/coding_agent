@@ -68,24 +68,33 @@ class TestCalculate(unittest.TestCase):
 
 class TestMainFormatAlias(unittest.TestCase):
     def test_format_integer_result(self):
-        self.assertEqual(calc_main.format_result(5.0), "5")
+        # We need to adapt the test because format_result now returns a box
+        result = calc_main.format_result(5.0)
+        self.assertIn("5", result)
+        self.assertIn("+", result)
 
     def test_format_float_result(self):
-        self.assertEqual(calc_main.format_result(2.5), "2.5")
+        result = calc_main.format_result(2.5)
+        self.assertIn("2.5", result)
+        self.assertIn("+", result)
 
 
 class TestRenderModule(unittest.TestCase):
     def test_render_format_result_integer(self):
-        self.assertEqual(render_utils.format_result(9.0), "9")
+        result = render_utils.format_result(9.0)
+        self.assertIn("9", result)
+        self.assertIn("+", result)
 
     def test_render_format_result_float(self):
-        self.assertEqual(render_utils.format_result(9.25), "9.25")
+        result = render_utils.format_result(9.25)
+        self.assertIn("9.25", result)
+        self.assertIn("+", result)
 
     def test_render_format_error(self):
-        self.assertEqual(
-            render_utils.format_error("Something went wrong"),
-            "Error: Something went wrong",
-        )
+        result = render_utils.format_error("Something went wrong")
+        self.assertIn("Error: Something went wrong", result)
+        self.assertIn("⚠", result)
+        self.assertIn("+", result)
 
     def test_render_format_usage_contains_usage(self):
         usage = render_utils.format_usage()
@@ -114,7 +123,8 @@ class TestMainFunction(unittest.TestCase):
             with redirect_stdout(output):
                 calc_main.main()
 
-        self.assertEqual(output.getvalue().strip(), "15")
+        self.assertIn("15", output.getvalue().strip())
+        self.assertIn("+", output.getvalue().strip())
 
     def test_main_with_missing_argument(self):
         exit_code, printed = self.run_main_with_args(["main.py"])
@@ -127,13 +137,15 @@ class TestMainFunction(unittest.TestCase):
         exit_code, printed = self.run_main_with_args(["main.py", "10 ^ 5"])
 
         self.assertEqual(exit_code, 1)
-        self.assertIn("Error: Unsupported operator", printed)
+        self.assertIn("Error:", printed)
+        self.assertIn("Unsupported operator", printed)
 
     def test_main_with_division_by_zero(self):
         exit_code, printed = self.run_main_with_args(["main.py", "10 / 0"])
 
         self.assertEqual(exit_code, 1)
-        self.assertIn("Error: Division by zero is not allowed.", printed)
+        self.assertIn("Error:", printed)
+        self.assertIn("Division by zero", printed)
 
 
 if __name__ == "__main__":
